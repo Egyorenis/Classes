@@ -17,7 +17,7 @@ function init() {
     groundBlock.position.y = 0; // Position it at the ground level
     scene.add(groundBlock);
 
-    // Create a player entity (a cylinder)
+    // Create the player entity (a cylinder)
     const playerGeometry = new THREE.CylinderGeometry(0.5, 0.5, 1.5, 32); // Cylinder as player model
     const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff }); // Blue player
     player = new THREE.Mesh(playerGeometry, playerMaterial);
@@ -25,8 +25,8 @@ function init() {
     scene.add(player);
 
     // Set camera position inside the player
-    camera.position.set(0, 0.75, 2); // Set camera at the top of the cylinder
-    camera.lookAt(player.position); // Look at the player's position
+    camera.position.set(0, 0.75, 2); // Set camera above the player cylinder
+    camera.lookAt(player.position); // Look at the player cylinder
 
     // Mouse lock functionality
     document.body.addEventListener('click', function() {
@@ -52,8 +52,8 @@ function onMouseMove(event) {
     const movementY = event.movementY || 0;
 
     // Rotate the player based on mouse movement
-    player.rotation.y -= movementX * 0.002; 
-    camera.rotation.x -= movementY * 0.002; // Rotate camera based on mouse movement
+    player.rotation.y -= movementX * 0.002; // Rotate player based on horizontal mouse movement
+    camera.rotation.x -= movementY * 0.002; // Rotate camera based on vertical mouse movement
     camera.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, camera.rotation.x)); // Limit vertical look
 }
 
