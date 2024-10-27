@@ -1,5 +1,5 @@
 // game.js
-let scene, camera, renderer, player;
+let scene, camera, renderer, player, groundBlock;
 let inventory = [];
 
 // Initialize the game
@@ -10,16 +10,23 @@ function init() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
     
-    // Create a green block
-    const geometry = new THREE.BoxGeometry();
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Solid green color
-    player = new THREE.Mesh(geometry, material);
+    // Create a green block as the ground
+    const blockGeometry = new THREE.BoxGeometry(1, 1, 1); // Ground block size
+    const blockMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Solid green color
+    groundBlock = new THREE.Mesh(blockGeometry, blockMaterial);
+    groundBlock.position.y = 0; // Position it at the ground level
+    scene.add(groundBlock);
+
+    // Create a player entity (a small cube or capsule)
+    const playerGeometry = new THREE.CylinderGeometry(0.5, 0.5, 1.5, 32); // Cylinder as player model
+    const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff }); // Blue player
+    player = new THREE.Mesh(playerGeometry, playerMaterial);
+    player.position.set(0, 1.5, 0); // Position it above the block
     scene.add(player);
 
-    // Set the block position and camera position
-    player.position.y = 0; // Block is at the ground level
-    camera.position.set(0, 1.5, 3); // Camera is above the block
-    camera.lookAt(0, 0, 0); // Look at the block
+    // Set camera position
+    camera.position.set(0, 1.5, 3); // Camera is behind the player
+    camera.lookAt(player.position); // Look at the player
 
     // Mouse lock functionality
     document.body.addEventListener('click', function() {
@@ -44,8 +51,8 @@ function onMouseMove(event) {
     const movementX = event.movementX || 0;
     const movementY = event.movementY || 0;
 
-    player.rotation.y -= movementX * 0.002; // Adjust rotation speed
-    camera.rotation.x -= movementY * 0.002; // Adjust rotation speed
+    player.rotation.y -= movementX * 0.002; // Rotate player based on mouse movement
+    camera.rotation.x -= movementY * 0.002; // Rotate camera based on mouse movement
     camera.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, camera.rotation.x)); // Limit vertical look
 }
 
